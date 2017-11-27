@@ -22,6 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.text.MaskFormatter;
 
 /**
@@ -42,9 +44,6 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
     private StringBuilder sb = new StringBuilder();
     protected Conversa c;
     protected Whatsapp w = new Whatsapp();
-    protected boolean primeiraVez = true;
-
-    
 
     public void setC(Conversa c) {
         this.c = c;
@@ -54,21 +53,10 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
         this.w = w;
     }
 
-    public void setPrimeiraVez(boolean primeiraVez) {
-        this.primeiraVez = primeiraVez;
-    }
-
     public JFrameWhatsapp() {
         initComponents();
         jListContatos.setModel(new DefaultListModel<>());
-        if (primeiraVez) {
-            String nome = JOptionPane.showInputDialog("Insira seu nome:");
-            jLabelNomeUsuario.setText(nome);
-            w.setNomeUsuario(nome);
-            primeiraVez = false;
-        } else {
 
-        }
     }
 
     /**
@@ -107,6 +95,12 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -213,7 +207,7 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jButtonPesquisar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
@@ -221,8 +215,8 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
                         .addComponent(jTextFieldPesquisar)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLabelNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabelNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonAlterarNome, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane3))
                     .addGroup(layout.createSequentialGroup()
@@ -252,6 +246,7 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAlterarNome)
                     .addComponent(jLabelNomeContato, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,7 +257,7 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabelStatus)
                         .addComponent(jComboBoxOnlineOffline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
@@ -278,7 +273,7 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -298,13 +293,13 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
             if (jRadioButtonVoce.isSelected()) {
                 emissor = w.getNomeUsuario();
             } else {
-                emissor = w.getListaConversa().get(jListContatos.getAnchorSelectionIndex()).getContato();
+                emissor = w.getListaConversa().get(jListContatos.getSelectedIndex()).getContato();
             }
             Mensagem m = new Mensagem(emissor, jTextAreaMensagem.getText(), data, hora);
-            c.addMensagem(m);
+            w.getListaConversa().get(jListContatos.getSelectedIndex()).addMensagem(m);
             jTextAreaMensagem.setText("");
             //for (int i = 0; i < c.listaMensagens.size(); i++) {
-            w.getListaConversa().get(jListContatos.getAnchorSelectionIndex()).addMensagem(m);
+            //w.getListaConversa().get(jListContatos.getAnchorSelectionIndex()).addMensagem(m);
             /*  c.listaMensagens.get(i).setStatus("Enviado ");
 
                 sb.append(c.listaMensagens.get(i).getData() + "\n"
@@ -341,25 +336,13 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
 
     private void jButtonNovaMensagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaMensagemActionPerformed
         // TODO add your handling code here:
-        /*JanelaNewContato add = new JanelaNewContato();
-        add.setLocationRelativeTo(null);
-        add.setIconImage(new ImageIcon("wpp.png").getImage());
-        add.setTitle("Add");
-        add.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        add.setSize(200, 100);
-        add.setVisible(true);
-        String telContato = add.getTel();*/
-
         String telContato = JOptionPane.showInputDialog("Insira o número");
-        String vistoPorUltimo = "Online";
-        c = new Conversa(telContato, vistoPorUltimo);
+        w.iniciarConversa(telContato);
         DefaultListModel<String> modelo = (DefaultListModel<String>) jListContatos.getModel();
-        w.addConversa(c);
         int i;
         for (i = 0; i < modelo.size(); i++) {
-            if (telContato.equals(modelo)) {
+            if (telContato.equals(modelo.get(i))) {
                 jListContatos.setSelectedIndex(i);
-
                 return;
             }
         }
@@ -382,10 +365,13 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
 
     private void jButtonPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisarActionPerformed
         // TODO add your handling code here:
+        jTextFieldPesquisar.setText("");
+        jTextAreaResultadoBusca.setText("");
         try {
             StringBuilder sb = new StringBuilder();
-
-            sb.append(c.Buscar(jTextFieldPesquisar.getText().toString()));
+            for (int i = 0; i < w.getListaConversa().size(); i++) {
+                sb.append(w.getListaConversa().get(i).Buscar(jTextFieldPesquisar.getText().toString()));
+            }
             jTextAreaResultadoBusca.setText(sb.toString());
         } catch (nenhumaMensagemException | NullPointerException e) {
             JOptionPane.showMessageDialog(null, e.toString(), "ERRO", HEIGHT);
@@ -411,12 +397,52 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
         String fileName = "Whats.txt";
-        try(FileOutputStream fout = new FileOutputStream(fileName);
-                ObjectOutputStream oout = new ObjectOutputStream(fout)){
-            oout.writeObject(this);
-            //oout.writeObject(wpp.w);
-        }catch(Exception e){}
+        JOptionPane.showMessageDialog(null, "Salvando...");
+        try (FileOutputStream fout = new FileOutputStream(fileName);
+                ObjectOutputStream oout = new ObjectOutputStream(fout)) {
+            oout.writeObject(w);
+        } catch (Exception e) {
+        }
     }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+
+        File f = new File("Whats.txt");
+        if (f.exists()) {
+            try (FileInputStream fin = new FileInputStream(f);
+                    ObjectInputStream oin = new ObjectInputStream(fin)) {
+                w = (Whatsapp) oin.readObject();
+                jLabelNomeUsuario.setText(w.getNomeUsuario());
+                DefaultListModel<String> modelo = (DefaultListModel<String>) jListContatos.getModel();
+                for (int i = 0; i < w.getListaConversa().size(); i++) {
+                    modelo.add(i, w.getListaConversa().get(i).getContato());
+                    jListContatos.setSelectedIndex(i);
+                }
+
+                //jListContatos = (JList) oin.readObject();
+            } catch (Exception e) {
+            }
+
+        } else {
+            String nome = JOptionPane.showInputDialog("Insira seu nome:");
+            jLabelNomeUsuario.setText(nome);
+            w.setNomeUsuario(nome);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        String fileName = "Whats.txt";
+        File f = new File(fileName);
+        try (FileOutputStream fout = new FileOutputStream(fileName);
+                ObjectOutputStream oout = new ObjectOutputStream(fout)) {
+            oout.writeObject(w);
+            oout.writeObject(jLabelNomeUsuario);
+
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -449,7 +475,6 @@ public class JFrameWhatsapp extends javax.swing.JFrame implements Serializable {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JFrameWhatsapp().setVisible(true);
-                
             }
         });
     }

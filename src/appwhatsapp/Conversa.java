@@ -8,6 +8,10 @@ public class Conversa implements Serializable{
 
     private String contato;
     protected ArrayList<Mensagem> listaMensagens = new ArrayList<>();
+
+    public ArrayList<Mensagem> getListaMensagens() {
+        return listaMensagens;
+    }
     private String vistoPorUltimo;
 
     public String getContato() {

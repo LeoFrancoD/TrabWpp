@@ -20,15 +20,16 @@ public class AppWhatsapp implements Serializable{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM" + "-" + "HH:mm");
         String dataEHora = now.format(formatter);
         System.out.println(dataEHora);*/
-        JFrameWhatsapp wpp = null;
-        File f = new File("Whats.txt");
+        JFrameWhatsapp wpp = new JFrameWhatsapp();
+        /*File f = new File("Whats.txt");
         if(f.exists()){
             abrir(f, wpp);
         }else{
             wpp  = new JFrameWhatsapp();
-        }
+        }*/
         wpp.setIconImage(new ImageIcon("wpp.png").getImage());
         wpp.setLocationRelativeTo(null);
+        wpp.setResizable(false);
         wpp.setVisible(true);
 
     }
@@ -40,7 +41,7 @@ public class AppWhatsapp implements Serializable{
         return (dataEHora);
     }
     
-    public void salvar(JFrameWhatsapp wpp) {
+    /*public void salvar(JFrameWhatsapp wpp) {
         String fileName = "Whats.txt";
         try(FileOutputStream fout = new FileOutputStream(fileName);
                 ObjectOutputStream oout = new ObjectOutputStream(fout)){
@@ -55,9 +56,7 @@ public class AppWhatsapp implements Serializable{
                 ObjectInputStream oin = new ObjectInputStream(fin)){
             wpp = (JFrameWhatsapp) oin.readObject();
             //wpp.w = (Whatsapp) oin.readObject();
-        }catch(Exception e){}
-        
-        
-    }
+        }catch(Exception e){}   
+    }*/
 
 }
